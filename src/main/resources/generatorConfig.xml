@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+  <context id="tocook1" targetRuntime="MyBatis3">
+
+    <!-- DB接続先 -->
+    <jdbcConnection driverClass="org.postgresql.Driver"
+      connectionURL="jdbc:postgresql://localhost:5432/tocook"
+      userId="tocook" password="g68AeeRty3zx">
+    </jdbcConnection>
+
+    <!-- DTO -->
+    <javaModelGenerator
+      targetPackage="tocook.dto.generator"
+      targetProject="2cook-dev/src/main/java">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <!-- Mapper xml -->
+    <sqlMapGenerator targetPackage="tocook.dao.generator"
+      targetProject="2cook-dev/src/main/resources">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <!-- Mapper -->
+    <javaClientGenerator type="XMLMAPPER"
+      targetPackage="tocook.dao.generator"
+      targetProject="2cook-dev/src/main/java">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+    <!-- テーブル -->
+    <table tableName="cook_user_mst"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+    <table tableName="common_mst"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+    <table tableName="food_mst"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+    <table tableName="cook_mst"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+    <table tableName="cook_food_tbl"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+    <table tableName="routine_mst"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+    <table tableName="routine_eat_tbl"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+    <table tableName="schedule_tbl"
+      enableInsert="true" enableSelectByPrimaryKey="true"
+      enableSelectByExample="false" enableUpdateByPrimaryKey="true"
+      enableUpdateByExample="false" enableDeleteByPrimaryKey="true"
+      enableDeleteByExample="false" enableCountByExample="false"
+      selectByExampleQueryId="false" modelType="flat">
+    </table>
+
+  </context>
+</generatorConfiguration>
