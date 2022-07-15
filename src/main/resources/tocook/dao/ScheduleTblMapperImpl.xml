@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tocook.dao.ScheduleTblMapperImpl">
+  <resultMap id="default" type="tocook.dto.ScheduleTblDTO">
+    <id column="schedule_id" jdbcType="VARCHAR" property="scheduleId" />
+    <result column="schedule_date" jdbcType="DATE" property="scheduleDate" />
+    <result column="schedule_time" jdbcType="SMALLINT" property="scheduleTime" />
+    <result column="cook_id" jdbcType="VARCHAR" property="cookId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="update_datetime" jdbcType="DATE" property="updateDatetime" />
+    <result column="version" jdbcType="SMALLINT" property="version" />
+    <result column="cook_name" jdbcType="VARCHAR" property="cookName" />
+    <result column="cook_process" jdbcType="VARCHAR" property="cookProcess" />
+    <result column="cook_price" jdbcType="BIGINT" property="cookPrice" />
+    <result column="cook_flg" jdbcType="BIT" property="cookFlg" />
+    <result column="cook_version" jdbcType="SMALLINT" property="cookVersion" />
+  </resultMap>
+
+  <select id="selectMaxId" resultType="java.lang.String">
+    SELECT
+      MAX(schedule_id) as schedule_id
+    FROM
+      schedule_tbl
+    ;
+  </select>
+
+  <select id="selectById" resultMap="default">
+    SELECT
+      schedule_tbl.schedule_id,
+      schedule_tbl.schedule_date,
+      schedule_tbl.schedule_time,
+      schedule_tbl.cook_id,
+      schedule_tbl.user_id,
+      schedule_tbl.update_datetime,
+      schedule_tbl.version,
+      cook_mst.cook_name,
+      cook_mst.cook_process,
+      cook_mst.cook_price,
+      cook_mst.cook_flg,
+      cook_mst.version as cook_version
+    FROM
+      schedule_tbl
+    INNER JOIN
+      cook_mst
+    ON
+      cook_mst.cook_id = schedule_tbl.cook_id
+    WHERE
+      schedule_tbl.schedule_id = #{scheduleId}
+    AND
+      schedule_tbl.user_id = #{userId}
+  </select>
+
+  <select id="selectByDate" resultMap="default">
+    SELECT
+      schedule_tbl.schedule_id,
+      schedule_tbl.schedule_date,
+      schedule_tbl.schedule_time,
+      schedule_tbl.cook_id,
+      schedule_tbl.user_id,
+      schedule_tbl.update_datetime,
+      schedule_tbl.version,
+      cook_mst.cook_name,
+      cook_mst.cook_process,
+      cook_mst.cook_price,
+      cook_mst.cook_flg,
+      cook_mst.version as cook_version
+    FROM
+      schedule_tbl
+    INNER JOIN
+      cook_mst
+    ON
+      cook_mst.cook_id = schedule_tbl.cook_id
+    WHERE
+      schedule_date = #{scheduleDate}
+    AND
+      schedule_tbl.user_id = #{userId}
+    ORDER BY
+      schedule_tbl.schedule_time
+    ASC
+  </select>
+
+  <select id="selectListCount" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+      schedule_tbl
+    INNER JOIN
+      cook_mst
+    ON
+      cook_mst.cook_id = schedule_tbl.cook_id
+    WHERE
+      schedule_tbl.user_id = #{userId}
+    <if test = "scheduleId != null">
+      AND schedule_tbl.schedule_id = #{scheduleId}
+    </if>
+    <if test = "scheduleDate != null">
+      AND schedule_tbl.schedule_date
+        BETWEEN
+          (SELECT DATE_TRUNC('month', #{scheduleDate}) + '-1 month')
+        AND
+          (SELECT DATE_TRUNC('month', #{scheduleDate}) + '-1 day')
+    </if>
+    <if test = "scheduleTime != null">
+      AND schedule_tbl.schedule_time = #{scheduleTime}
+    </if>
+    <if test = "cookId != null">
+      AND schedule_tbl.cook_id = #{cookId}
+    </if>
+    ;
+  </select>
+
+  <select id="selectList" resultMap="default">
+    SELECT
+      schedule_tbl.schedule_id,
+      schedule_tbl.schedule_date,
+      schedule_tbl.schedule_time,
+      schedule_tbl.cook_id,
+      schedule_tbl.user_id,
+      schedule_tbl.update_datetime,
+      schedule_tbl.version,
+      cook_mst.cook_name,
+      cook_mst.cook_process,
+      cook_mst.cook_price,
+      cook_mst.cook_flg,
+      cook_mst.version as cook_version
+    FROM
+      schedule_tbl
+    INNER JOIN
+      cook_mst
+    ON
+      cook_mst.cook_id = schedule_tbl.cook_id
+    WHERE
+      schedule_tbl.user_id = #{userId}
+    <if test = "scheduleId != null">
+      AND schedule_tbl.schedule_id = #{scheduleId}
+    </if>
+    <if test = "scheduleDate != null">
+      AND schedule_tbl.schedule_date
+        BETWEEN
+          (SELECT DATE_TRUNC('month', #{scheduleDate}) + '-1 month')
+        AND
+          (SELECT DATE_TRUNC('month', #{scheduleDate}) + '-1 day')
+    </if>
+    <if test = "scheduleTime != null">
+      AND schedule_tbl.schedule_time = #{scheduleTime}
+    </if>
+    <if test = "cookId != null">
+      AND schedule_tbl.cook_id = #{cookId}
+    </if>
+    ORDER BY
+    <if test="orderBy == 1">
+      schedule_tbl.schedule_id
+    </if>
+    <if test="orderBy == 2">
+      schedule_tbl.schedule_date
+    </if>
+    <if test="orderBy == 3">
+      schedule_tbl.schedule_time
+    </if>
+    <if test="orderBy == 4">
+      schedule_tbl.cook_id
+    </if>
+    <if test="ascOrDesc == 1">
+      ASC
+    </if>
+    <if test="ascOrDesc == 2">
+      DESC
+    </if>
+    LIMIT
+      #{limit}
+    OFFSET
+      #{offset}
+    ;
+  </select>
+
+  <insert id="insertBulk" parameterType="java.util.List">
+    insert into schedule_tbl
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        schedule_id,
+        schedule_date,
+        schedule_time,
+        cook_id,
+        user_id,
+    </trim>
+    values
+    <foreach collection="scheduleTblList" item="st" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{st.scheduleId,jdbcType=VARCHAR},
+        #{st.scheduleDate,jdbcType=DATE},
+        #{st.scheduleTime,jdbcType=SMALLINT},
+        #{st.cookId,jdbcType=VARCHAR},
+        #{st.userId,jdbcType=VARCHAR},
+      </trim>
+    </foreach>
+  </insert>
+
+  <update id="updateById" parameterType="tocook.dto.ScheduleTblDTO">
+    UPDATE
+      schedule_tbl
+    <set>
+      <if test="scheduleDate != null">
+        schedule_date = #{scheduleDate,jdbcType=DATE},
+      </if>
+      <if test="scheduleTime != null">
+        schedule_time = #{scheduleTime,jdbcType=SMALLINT},
+      </if>
+      <if test="cookId != null">
+        cook_id = #{cookId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDatetime != null">
+        update_datetime = #{updateDatetime,jdbcType=DATE},
+      </if>
+        version = #{version} + 1
+    </set>
+    WHERE
+      schedule_id = #{scheduleId,jdbcType=VARCHAR}
+    AND
+      user_id = #{userId,jdbcType=VARCHAR}
+  </update>
+
+  <delete id="deleteByDate">
+    delete from schedule_tbl
+    where
+      schedule_date = #{scheduleDate,jdbcType=DATE}
+    AND
+      user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>
